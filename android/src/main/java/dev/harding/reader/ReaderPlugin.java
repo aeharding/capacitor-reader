@@ -1,5 +1,6 @@
 package dev.harding.reader;
 
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -11,12 +12,11 @@ public class ReaderPlugin extends Plugin {
     private Reader implementation = new Reader();
 
     @PluginMethod
-    public void open(PluginCall call) {
-        String url = call.getString("url");
-        String toolbarColor = call.getString("toolbarColor");
+    public void echo(PluginCall call) {
+        String value = call.getString("value");
 
-        implementation.open(url, toolbarColor);
-
-        call.resolve();
+        JSObject ret = new JSObject();
+        ret.put("value", implementation.echo(value));
+        call.resolve(ret);
     }
 }
