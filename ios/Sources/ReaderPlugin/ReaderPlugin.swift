@@ -19,8 +19,15 @@ public class ReaderPlugin: CAPPlugin, CAPBridgedPlugin {
         let toolbarColor = call.getString("toolbarColor")
         let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
 
-        call.resolve([
-            "value": implementation.open(url, toolbarColor, entersReaderIfAvailable)
-        ])
+        if let viewController = bridge?.viewController, let safariVC = implementation.open(url, toolbarColor, entersReaderIfAvailable) {
+            DispatchQueue.main.async {
+                viewController.present(safariVC, animated: true) {
+                    call.resolve()
+                }
+            }
+            return
+        }
+
+        call.reject("failed to present SafariVC")
     }
 }

@@ -15,8 +15,8 @@ npx cap sync
 
 <docgen-index>
 
-- [`open(...)`](#open)
-- [Interfaces](#interfaces)
+* [`open(...)`](#open)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -33,9 +33,11 @@ open(options: CapacitorReaderOpenOptions) => Promise<void>
 | ------------- | --------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#capacitorreaderopenoptions">CapacitorReaderOpenOptions</a></code> |
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### CapacitorReaderOpenOptions
 
