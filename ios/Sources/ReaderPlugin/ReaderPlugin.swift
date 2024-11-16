@@ -10,14 +10,17 @@ public class ReaderPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "ReaderPlugin"
     public let jsName = "Reader"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "open", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Reader()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
+    @objc func open(_ call: CAPPluginCall) {
+        let url = call.getString("url") ?? ""
+        let toolbarColor = call.getString("toolbarColor")
+        let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
+
         call.resolve([
-            "value": implementation.echo(value)
+            "value": implementation.open(url, toolbarColor, entersReaderIfAvailable)
         ])
     }
 }

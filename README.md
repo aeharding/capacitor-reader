@@ -1,6 +1,8 @@
 # capacitor-reader
 
-Opens a simplified in app browser, prioritizing readability
+Opens a simplified in app browser, prioritizing readability.
+
+If you're looking for additional functionality, this plugin is not for you. ;)
 
 ## Install
 
@@ -13,25 +15,34 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+- [`open(...)`](#open)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### open(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+open(options: CapacitorReaderOpenOptions) => Promise<void>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+| Param         | Type                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#capacitorreaderopenoptions">CapacitorReaderOpenOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+---
 
---------------------
+### Interfaces
+
+#### CapacitorReaderOpenOptions
+
+| Prop                          | Type                 | Description                                        | Default            |
+| ----------------------------- | -------------------- | -------------------------------------------------- | ------------------ |
+| **`url`**                     | <code>string</code>  |                                                    |                    |
+| **`toolbarColor`**            | <code>string</code>  | The color of the toolbar                           |                    |
+| **`entersReaderIfAvailable`** | <code>boolean</code> | Whether to enter reader mode if available iOS only | <code>false</code> |
 
 </docgen-api>

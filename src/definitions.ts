@@ -1,3 +1,21 @@
+export interface CapacitorReaderOpenOptions {
+  url: string;
+  /**
+   * The color of the toolbar
+   * @example "#000000"
+   */
+  toolbarColor?: string;
+
+  /**
+   * Whether to enter reader mode if available
+   *
+   * iOS only
+   *
+   * @default false
+   */
+  entersReaderIfAvailable?: boolean;
+}
+
 export interface ReaderPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+  open(options: CapacitorReaderOpenOptions): Promise<void>;
 }
