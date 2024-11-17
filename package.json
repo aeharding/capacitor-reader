@@ -1,6 +1,6 @@
 {
   "name": "capacitor-reader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Opens a simplified in app browser, prioritizing readability",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
