@@ -12,22 +12,34 @@ public class ReaderPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "open", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = Reader()
+    private lazy var implementation: Reader = {
+        return Reader(plugin: self)
+    }()
 
     @objc func open(_ call: CAPPluginCall) {
-        let url = call.getString("url") ?? ""
-        let toolbarColor = call.getString("toolbarColor")
-        let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
-
-        if let viewController = bridge?.viewController, let safariVC = implementation.open(url, toolbarColor, entersReaderIfAvailable) {
-            DispatchQueue.main.async {
-                viewController.present(safariVC, animated: true) {
-                    call.resolve()
-                }
-            }
+        guard let url = call.getString("url") else {
+            call.reject("URL parameter is required")
             return
         }
 
-        call.reject("failed to present SafariVC")
+        let toolbarColor = call.getString("toolbarColor")
+        let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
+
+        do {
+            if let viewController = bridge?.viewController {
+                let safariVC = try implementation.open(url, toolbarColor, entersReaderIfAvailable)
+                DispatchQueue.main.async {
+                    viewController.present(safariVC, animated: true) {
+                        call.resolve()
+                    }
+                }
+                return
+            }
+            call.reject("No view controller available")
+        } catch let error as ReaderError {
+            call.reject(error.message)
+        } catch {
+            call.reject("Unknown error occurred: \(error.localizedDescription)")
+        }
     }
 }

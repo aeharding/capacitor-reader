@@ -1,3 +1,5 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+
 export interface CapacitorReaderOpenOptions {
   url: string;
   /**
@@ -17,5 +19,18 @@ export interface CapacitorReaderOpenOptions {
 }
 
 export interface ReaderPlugin {
+  /**
+   * iOS & Android only
+   */
   open(options: CapacitorReaderOpenOptions): Promise<void>;
+
+  /**
+   * iOS only: Listen for the browser finished event.
+   * It fires when the Browser is closed by the user.
+   *
+   * This is necessary for those that want to track
+   * iOS status taps (since capacitor swizzles all
+   * iOS navigation taps)
+   */
+  addListener(eventName: 'browserFinished', listenerFunc: () => void): Promise<PluginListenerHandle>;
 }

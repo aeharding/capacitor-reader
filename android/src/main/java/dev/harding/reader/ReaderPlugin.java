@@ -16,7 +16,13 @@ public class ReaderPlugin extends Plugin {
         String url = call.getString("url");
         String toolbarColor = call.getString("toolbarColor");
 
-        implementation.open(bridge.getContext(), url, toolbarColor);
+        try {
+            implementation.open(bridge.getContext(), url, toolbarColor);
+        } catch (Exception e) {
+            call.reject("Failed to open reader", e);
+            return;
+        }
+
         call.resolve();
     }
 }

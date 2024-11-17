@@ -2,20 +2,50 @@ import Foundation
 import SafariServices
 import UIKit
 
-@objc public class Reader: NSObject {
-    @objc public func open(_ url: String, _ toolbarColor: String?, _ entersReaderIfAvailable: Bool) -> SFSafariViewController? {
-        if let url = URL(string: url) {
-            let config = SFSafariViewController.Configuration()
-            config.entersReaderIfAvailable = entersReaderIfAvailable
-            
-            let safariVC = SFSafariViewController(url: url, configuration: config)
-            if let toolbarColor = toolbarColor {
-                safariVC.preferredBarTintColor = UIColor(hex: toolbarColor)
-            }
+enum ReaderError: Error {
+    case invalidURL
+    case invalidColorFormat
 
-            return safariVC
+    var message: String {
+        switch self {
+        case .invalidURL:
+            return "Failed to create URL from provided string"
+        case .invalidColorFormat:
+            return "Invalid hex color format. Expected format: '#RRGGBB' or '#RRGGBBAA'"
+        }
+    }
+}
+
+@objc public class Reader: NSObject, SFSafariViewControllerDelegate {
+    private weak var plugin: ReaderPlugin?
+
+    init(plugin: ReaderPlugin) {
+        self.plugin = plugin
+        super.init()
+    }
+
+    @objc public func open(_ url: String,
+                          _ toolbarColor: String?,
+                          _ entersReaderIfAvailable: Bool) throws -> SFSafariViewController {
+        guard let url = URL(string: url) else {
+            throw ReaderError.invalidURL
         }
 
-        return nil;
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = entersReaderIfAvailable
+
+        let safariVC = SFSafariViewController(url: url, configuration: config)
+        safariVC.delegate = self
+
+        if let toolbarColor = toolbarColor {
+            let color = UIColor(hex: toolbarColor)
+            safariVC.preferredBarTintColor = color
+        }
+
+        return safariVC
+    }
+
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        plugin?.notifyListeners("browserFinished", data: [:])
     }
 }
