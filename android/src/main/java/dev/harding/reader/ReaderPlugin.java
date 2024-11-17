@@ -14,15 +14,20 @@ public class ReaderPlugin extends Plugin {
     @PluginMethod
     public void open(PluginCall call) {
         String url = call.getString("url");
+        if (url == null) {
+            call.reject("URL parameter is required");
+            return;
+        }
+
         String toolbarColor = call.getString("toolbarColor");
 
         try {
             implementation.open(bridge.getContext(), url, toolbarColor);
+            call.resolve();
+        } catch (ReaderException e) {
+            call.reject(e.getMessage());
         } catch (Exception e) {
             call.reject("Failed to open reader", e);
-            return;
         }
-
-        call.resolve();
     }
 }

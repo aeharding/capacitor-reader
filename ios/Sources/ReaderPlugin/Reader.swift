@@ -5,6 +5,7 @@ import UIKit
 enum ReaderError: Error {
     case invalidURL
     case invalidColorFormat
+    case unsupportedScheme
 
     var message: String {
         switch self {
@@ -12,6 +13,8 @@ enum ReaderError: Error {
             return "Failed to create URL from provided string"
         case .invalidColorFormat:
             return "Invalid hex color format. Expected format: '#RRGGBB' or '#RRGGBBAA'"
+        case .unsupportedScheme:
+            return "The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported."
         }
     }
 }
@@ -29,6 +32,11 @@ enum ReaderError: Error {
                           _ entersReaderIfAvailable: Bool) throws -> SFSafariViewController {
         guard let url = URL(string: url) else {
             throw ReaderError.invalidURL
+        }
+
+        guard let scheme = url.scheme?.lowercased(),
+              scheme == "http" || scheme == "https" else {
+            throw ReaderError.unsupportedScheme
         }
 
         let config = SFSafariViewController.Configuration()
