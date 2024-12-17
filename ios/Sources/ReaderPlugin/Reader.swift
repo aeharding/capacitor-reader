@@ -54,6 +54,7 @@ enum ReaderError: Error {
     }
 
     public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        plugin?.closeIfNeeded()
         plugin?.notifyListeners("browserFinished", data: [:])
     }
 }
