@@ -17,6 +17,9 @@ public class Reader {
         }
 
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+
+        builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
+
         CustomTabColorSchemeParams.Builder params = new CustomTabColorSchemeParams.Builder();
 
         if (toolbarColor != null && !toolbarColor.isEmpty()) {
